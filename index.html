@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Classifier</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.18.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.5.1/dist/tf-vis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1>AI Image Classifier</h1>
+                <p>Train custom models with your images</p>
+            </div>
+        </header>
+
+        <div class="app-container">
+            <section id="class-management" class="section">
+                <div class="section-header">
+                    <div class="step-number">1</div>
+                    <h2>Create Classes</h2>
+                </div>
+                <div class="class-controls">
+                    <div class="input-group">
+                        <input type="text" id="class-name" placeholder="Enter class name">
+                        <button id="add-class" class="btn-primary">
+                            <span>Add Class</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="classes-container" class="classes-container">
+                    <div class="empty-state">
+                        <div class="empty-icon">📷</div>
+                        <p>No classes created yet</p>
+                        <p class="empty-subtitle">Add your first class to get started</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="training-section" class="section">
+                <div class="section-header">
+                    <div class="step-number">2</div>
+                    <h2>Train Models</h2>
+                </div>
+                <div class="training-controls">
+                    <button id="train-all" class="btn-train-all">
+                        <span>Train All Models</span>
+                    </button>
+                    <div class="model-buttons">
+                        <button id="train-lr" class="btn-model">
+                            <span>Logistic Regression</span>
+                        </button>
+                        <button id="train-rf" class="btn-model">
+                            <span>Random Forest</span>
+                        </button>
+                        <button id="train-cnn" class="btn-model">
+                            <span>Neural Network</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="training-progress" class="training-progress">
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <span id="progress-text">0%</span>
+                    </div>
+                    <div id="training-status" class="training-status-ready">Ready to train</div>
+                </div>
+            </section>
+
+            <section id="evaluation-section" class="section">
+                <div class="section-header">
+                    <div class="step-number">3</div>
+                    <h2>Model Performance</h2>
+                </div>
+                <div id="evaluation-results" class="evaluation-results">
+                    <div class="model-results">
+                        <div class="model-header">
+                            <h3>Logistic Regression</h3>
+                            <div class="model-badge">Fast</div>
+                        </div>
+                        <div class="metrics" id="lr-metrics">
+                            <div class="metric-placeholder">Not trained yet</div>
+                        </div>
+                    </div>
+                    <div class="model-results">
+                        <div class="model-header">
+                            <h3>Random Forest</h3>
+                            <div class="model-badge">Accurate</div>
+                        </div>
+                        <div class="metrics" id="rf-metrics">
+                            <div class="metric-placeholder">Not trained yet</div>
+                        </div>
+                    </div>
+                    <div class="model-results">
+                        <div class="model-header">
+                            <h3>Neural Network</h3>
+                            <div class="model-badge">Advanced</div>
+                        </div>
+                        <div class="metrics" id="cnn-metrics">
+                            <div class="metric-placeholder">Not trained yet</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="testing-section" class="section">
+                <div class="section-header">
+                    <div class="step-number">4</div>
+                    <h2>Test Models</h2>
+                </div>
+                <div class="testing-controls">
+                    <div class="test-option">
+                        <div class="test-header">
+                            <div class="test-icon">📁</div>
+                            <h3>Upload Image</h3>
+                        </div>
+                        <input type="file" id="test-image-upload" accept="image/*">
+                        <div id="uploaded-image-preview" class="image-preview"></div>
+                    </div>
+                    <div class="test-option">
+                        <div class="test-header">
+                            <div class="test-icon">📷</div>
+                            <h3>Webcam</h3>
+                        </div>
+                        <div class="webcam-controls">
+                            <button id="start-webcam" class="btn-webcam">
+                                <span>Start Webcam</span>
+                            </button>
+                            <button id="capture-image" class="btn-capture" disabled>
+                                <span>Capture</span>
+                            </button>
+                        </div>
+                        <div id="webcam-container" class="webcam-container">
+                            <video id="webcam" autoplay playsinline></video>
+                            <canvas id="webcam-canvas" style="display: none;"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div id="prediction-results" class="prediction-results">
+                    <div class="model-prediction">
+                        <h3>Logistic Regression</h3>
+                        <div id="lr-prediction" class="prediction-output">
+                            <div class="prediction-placeholder">No prediction available</div>
+                        </div>
+                    </div>
+                    <div class="model-prediction">
+                        <h3>Random Forest</h3>
+                        <div id="rf-prediction" class="prediction-output">
+                            <div class="prediction-placeholder">No prediction available</div>
+                        </div>
+                    </div>
+                    <div class="model-prediction">
+                        <h3>Neural Network</h3>
+                        <div id="cnn-prediction" class="prediction-output">
+                            <div class="prediction-placeholder">No prediction available</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="js/data/dataset-manager.js"></script>
+    <script src="js/trainers/logistic-regression-trainer.js"></script>
+    <script src="js/trainers/random-forest-trainer.js"></script>
+    <script src="js/trainers/cnn-trainer.js"></script>
+    <script src="js/models/model-manager.js"></script>
+    <script src="js/inference/predictor.js"></script>
+    <script src="js/ui/class-manager.js"></script>
+    <script src="js/ui/training-ui.js"></script>
+    <script src="js/ui/webcam.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
