@@ -16,4 +16,4 @@ A web-based application that allows users to create custom image classification 
   - Real-time webcam feed predictions
 - **Validation**: Image format/size checks and minimum class size requirements
 
-## Project Structure
+
