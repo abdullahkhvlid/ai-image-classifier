@@ -1,4 +1,4 @@
-# Teachable Machine-Style Multi-Class Image 
+# Teachable Machine-Style Multi-Class Image Classifier
 
 A web-based application that allows users to create custom image classification models using their own data, similar to Google's Teachable Machine.
 
@@ -15,6 +15,7 @@ A web-based application that allows users to create custom image classification 
   - Upload images for prediction
   - Real-time webcam feed predictions
 - **Validation**: Image format/size checks and minimum class size requirements
+
 
 
 
